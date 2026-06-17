@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title></title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<p>如果运行EXP后打不通，注意：
+1.偏移量是否正确，除了在IDA确认，还要在==gdb动态调试确定偏移量==(在输入函数下断点，观察栈)
+2.地址有没有写错
+3.send和sendline，如果send不行，就换成sendline；如果sendline不行，就换成send；一般情况都使用send
+4.32位系统进行ROP，注意返回地址和参数的位置，ret一个函数时，后面是接返回地址
+5.==64位系统注意栈对齐问题，尝试加上ret_addr==</p>
+<p>使用IDA时，除了看伪C代码，==还要看反汇编代码，可能有不同的地方==</p>
+<p>p32/p64: 打包一个整数，分别打包为32位或64位
+u32/u64:解包一个字符串，得到整数
+encode：str-&gt;byte
+decode:byte-&gt;str
+平常io.recv()得到的都是字符串，io.send()送去的是字符串。</p>
+<pre><code class="language-bash"><span class="hljs-built_in">cat</span> /flag       <span class="hljs-comment">#一般情况会给出flag  </span>
+<span class="hljs-built_in">ls</span> /root        <span class="hljs-comment">#查看root文件夹</span>
+<span class="hljs-built_in">cat</span> /root/flag  <span class="hljs-comment">#如果flag藏在root里，获取flag</span>
+<span class="hljs-built_in">ls</span> /home        <span class="hljs-comment">#查看home文件夹    </span>
+<span class="hljs-built_in">cat</span> /home/*/flag    <span class="hljs-comment">#如果flag藏在tmp里，获取flag</span>
+<span class="hljs-built_in">ls</span> /tmp         <span class="hljs-comment">#查看tmp文件夹 </span>
+<span class="hljs-built_in">cat</span> /tmp/flag   <span class="hljs-comment">#如果flag藏在tmp里，获取flag</span>
+grep -r <span class="hljs-string">&quot;flag{&quot;</span> / 2&gt;/dev/null          <span class="hljs-comment">#直接全局搜索flag{}形式的字符串</span>
+</code></pre>
+<p>==先cat flag
+没有就找root、home、tmp
+没有就用grep -r &quot;flag{&quot; / 2&gt;/dev/null==</p>
+
+            
+            
+        </body>
+        </html>
