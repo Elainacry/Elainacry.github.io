@@ -39,15 +39,14 @@ init函数提供了puts的真实地址(前面调用了puts函数)
 
 正常情况下的思路：利用栈溢出漏洞，构造orw的ROP：首先利用puts真实地址函数泄露libc，得到read, write, open函数的真实地址，接着将./flag或./flag.txt字符串写到bss段，再进行orw。
 
-==但是沙箱禁用了openat函数，而libc里的open函数内部会调用openat函数，所以不能用libc里的open函数；==
+<mark>但是沙箱禁用了openat函数，而libc里的open函数内部会调用openat函数，所以不能用libc里的open函数；</mark>
 
-==考虑使用系统调用的open函数，那就要找pop rax;ret和syscall;ret，这样就打开flag文件，接着就正常的orw==
+<mark>考虑使用系统调用的open函数，那就要找pop rax;ret和syscall;ret，这样就打开flag文件，接着就正常的orw</mark>
 
 
 
 ## 查找寄存器
-
-==对于rax, rsi, rdx等寄存器的gadget比较好找，但syscall;ret的gadget不好找==
+<mark>对于rax, rsi, rdx等寄存器的gadget比较好找，但syscall;ret的gadget不好找</mark>
 
 使用命令查找syscall;ret：
 
@@ -147,11 +146,11 @@ io.sendline(payload_5)
 io.interactive()
 ```
 
-==注意：==
+<mark>注意：</mark>
 
-==/flag是从根目录打开flag文件==
+<mark>/flag是从根目录打开flag文件</mark>
 
-==./flag是从当前程序目录打开flag文件==
+<mark>./flag是从当前程序目录打开flag文件</mark>
 
 
 
