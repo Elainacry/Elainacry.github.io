@@ -1,20 +1,20 @@
-### checksec结果
+## checksec结果
 
-![屏幕截图 2026-07-18 133018](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 133018.png)
+![](rop_1.png)
 
 只开了NX保护，没有canay和PIE保护
 
 
 
-### IDA反汇编结果
+## IDA反汇编结果
 
-![屏幕截图 2026-07-18 132907](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 132907.png)
+![](rop_2.png)
 
-![屏幕截图 2026-07-18 132912](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 132912.png)
+![](rop_3.png)
 
-![屏幕截图 2026-07-18 134011](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 134011.png)
+![](rop_4.png)
 
-![屏幕截图 2026-07-18 132925](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 132925.png)
+![](rop_5.png)
 
 可以看到，程序有sandbox，开了沙箱保护
 
@@ -24,15 +24,15 @@ init函数提供了puts的真实地址(前面调用了puts函数)
 
 
 
-### 查看沙箱保护
+## 查看沙箱保护
 
-![屏幕截图 2026-07-18 133042](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 133042.png)
+![](rop_6.png)
 
 查看结果：程序允许read, write, open函数，无法使用system函数，因此不能直接用system(/bin/sh)来getshell，考虑使用orw的ROP
 
 
 
-### 思路
+## 思路
 
 正常情况下的思路：利用栈溢出漏洞，构造orw的ROP：首先利用puts真实地址函数泄露libc，得到read, write, open函数的真实地址，接着将./flag或./flag.txt字符串写到bss段，再进行orw。
 
@@ -42,7 +42,7 @@ init函数提供了puts的真实地址(前面调用了puts函数)
 
 
 
-### 查找寄存器
+## 查找寄存器
 
 ==对于rax, rsi, rdx等寄存器的gadget比较好找，但syscall;ret的gadget不好找==
 
@@ -53,13 +53,11 @@ objdump -d libc.so.6 | grep -B2 -A2 'syscall'
 或者objdump -d libc.so.6 | grep -B2 -A2 'syscall' | grep -B1 -A1 'ret'
 ```
 
-![屏幕截图 2026-07-18 152849](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 152849.png)
+![](rop_7.png)
 
-![屏幕截图 2026-07-18 155358](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 155358.png)
+![](rop_8.png)
 
-
-
-### EXP
+## EXP
 
 ```py
 from pwn import *
@@ -154,22 +152,22 @@ io.interactive()
 
 
 
-### 远程得到的libc版本
+## 远程得到的libc版本
 
-![屏幕截图 2026-07-18 160858](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 160858.png)
+![](rop_9.png)
 
 
 
-### 运行结果
+## 运行结果
 
 本地：
 
-![屏幕截图 2026-07-18 153314](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 153314.png)
+![](rop_10.png)
 
-![屏幕截图 2026-07-18 153251](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 153251.png)
+![](rop_11.png)
 
 远程：
 
-![屏幕截图 2026-07-18 160727](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 160727.png)
+![](rop_12.png)
 
-![屏幕截图 2026-07-18 160556](./media/MoeCTF_2021_special_ROP/屏幕截图 2026-07-18 160556.png)
+![](rop_13.png)
