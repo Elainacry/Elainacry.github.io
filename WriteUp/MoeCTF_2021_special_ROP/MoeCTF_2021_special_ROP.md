@@ -1,4 +1,8 @@
 ---
+
+title: WriteUp
+layout: page
+
 ---
 
 ## checksec结果
